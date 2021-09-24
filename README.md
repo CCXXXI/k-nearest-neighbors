@@ -63,7 +63,7 @@ y_max=30000
   * 若此，`sqrt`应替换为牛顿法求平方根
   * 定点数优化：性能成倍提升 - 韦易笑的文章 - 知乎 https://zhuanlan.zhihu.com/p/149517485
 * 寻找完美哈希函数：
-  * 我进行了一些搜索但没能找到简单的解决方案
+  * 进行了一些搜索但没能找到简单的解决方案
   * GNU的完美哈希函数生成工具：https://www.gnu.org/software/gperf/manual/gperf.html
   * 文档过于反人类，至今未能学会使用
 * 这份资料提到了一些其它算法：https://people.csail.mit.edu/indyk/helsinki-1.pdf
