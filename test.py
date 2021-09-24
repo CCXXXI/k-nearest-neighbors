@@ -1,8 +1,9 @@
 from math import inf
 from os import listdir
+
 from tqdm import trange
 
-path = r"C:\Users\ccxxx\ecnu\数据结构与算法\Grand Order\test"
+path = r"test"
 files = listdir(path)
 
 x_min = y_min = inf
