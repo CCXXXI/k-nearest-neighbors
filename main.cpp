@@ -6,7 +6,7 @@ int constexpr inf = 0x3f3f3f3f;
 
 // 辅助函数，相当于先push再pop
 template<typename E>
-auto push_pop(vector<E> &v, const E &e) {
+void push_pop(vector<E> &v, E const &e) {
     if (e < v.front()) {
         pop_heap(v.begin(), v.end());
         v.back() = e;
@@ -24,7 +24,7 @@ public:
         crd_arr_t crd;
         Other other;
 
-        point(const crd_arr_t &crd_in, Other other_in) : crd(crd_in), other(std::move(other_in)) {}
+        point(crd_arr_t const &crd_in, Other other_in) : crd(crd_in), other(std::move(other_in)) {}
     };
 
 private:
@@ -35,8 +35,8 @@ private:
     vector<point> &points_;
 
     // 以 [first, last) 中的点建树，返回此树的root
-    unsigned build(const unsigned &first, const unsigned &last, const bool &r) { // NOLINT(misc-no-recursion)
-        // auto const & r = choose_axis(first, last);
+    unsigned build(unsigned const &first, unsigned const &last, bool const &r) { // NOLINT(misc-no-recursion)
+        // auto const &r = choose_axis(first, last);
         auto const &num = last - first;
         auto const &mid = first + num / 2;
         if (num == 1) {
@@ -46,7 +46,7 @@ private:
         } else {
             auto const &b = points_.begin();
             nth_element(b + first, b + mid, b + last,
-                        [&](const point &x, const point &y) { return x.crd[r] < y.crd[r]; });
+                        [&](point const &x, point const &y) { return x.crd[r] < y.crd[r]; });
             // axis_[mid] = r;
             lc_[mid] = build(first, mid, !r);
             rc_[mid] = build(mid + 1, last, !r);
@@ -55,12 +55,12 @@ private:
     }
 
     // 选择 [first, last) 中方差最大的维度
-    [[nodiscard]] auto choose_axis(const unsigned &first, const unsigned &last) const {
+    [[nodiscard]] auto choose_axis(unsigned const &first, unsigned const &last) const {
         return variance(first, last, false) < variance(first, last, true);
     }
 
     // 计算 [first, last) 中，维度r的方差
-    [[nodiscard]] auto variance(const unsigned &first, const unsigned &last, const bool &r) const {
+    [[nodiscard]] auto variance(unsigned const &first, unsigned const &last, bool const &r) const {
         auto sum_x = 0.0f, sum_x2 = 0.0f;
         for (auto i = first; i != last; ++i) {
             auto const &tmp = static_cast<float>(points_[i].crd[r]);
@@ -87,7 +87,7 @@ private:
         double dis;
         Other other;
 
-        auto operator<(const ret_t &a) const {
+        auto operator<(ret_t const &a) const {
             return tie(this->dis, this->other) < tie(a.dis, a.other);
         }
     };
@@ -95,7 +95,7 @@ private:
     ret_t none_{numeric_limits<double>::infinity(), Other()};
 
     // 返回px的欧氏距离的平方，使用浮点数避免平方后溢出
-    auto dis2(const crd_arr_t &p, const unsigned &x) {
+    auto dis2(crd_arr_t const &p, unsigned const &x) {
         auto const &dis_x = static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
         auto const &dis_y = static_cast<double>(p[1]) - static_cast<double>(points_[x].crd[1]);
         return static_cast<double>(lround(sqrt(dis_x * dis_x + dis_y * dis_y) * 1000)) / 1000;
@@ -103,9 +103,9 @@ private:
 
 public:
     // 返回距离点p最近的k个点，欧氏距离
-    auto knn(const crd_arr_t &p, const unsigned &k) {
+    auto knn(crd_arr_t const &p, unsigned const &k) {
         vector<ret_t> ret(k, none_);
-        function<void(unsigned, bool)> dfs = [&](const unsigned &x, const bool &r) {
+        function<void(unsigned, bool)> dfs = [&](unsigned const &x, bool const &r) {
             if (x != inf) {
                 // auto const & r = axis_[x];
                 auto const &dis_sp = p[r] - points_[x].crd[r];
@@ -128,7 +128,7 @@ public:
 
 using name_t = array<char, 12>;
 
-auto &operator<<(ostream &o, const name_t &a) {
+auto &operator<<(ostream &o, name_t const &a) {
     for (auto &&i: a) {
         o << i;
     }
