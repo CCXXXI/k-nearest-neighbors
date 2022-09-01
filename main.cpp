@@ -2,9 +2,7 @@
 
 using namespace std;
 
-using u32 = uint32_t;
-
-auto constexpr inf = 0x3f3f3f3f;
+int constexpr inf = 0x3f3f3f3f;
 
 // 辅助函数，相当于先push再pop
 template<typename E>
@@ -31,14 +29,14 @@ public:
     };
 
 private:
-    u32 root_ = 0;
-    vector<u32> lc_, rc_;
+    unsigned root_ = 0;
+    vector<unsigned> lc_, rc_;
     // vector<bool> axis_;
     bool beg_ = false;
     vector<point> &points_;
 
     // 以 [first, last) 中的点建树，返回此树的root
-    u32 build(const u32 &first, const u32 &last, const bool &r) { // NOLINT(misc-no-recursion)
+    unsigned build(const unsigned &first, const unsigned &last, const bool &r) { // NOLINT(misc-no-recursion)
         // auto const & r = choose_axis(first, last);
         auto const &num = last - first;
         auto const &mid = first + num / 2;
@@ -60,12 +58,12 @@ private:
     }
 
     // 选择 [first, last) 中方差最大的维度
-    [[nodiscard]] auto choose_axis(const u32 &first, const u32 &last) const {
+    [[nodiscard]] auto choose_axis(const unsigned &first, const unsigned &last) const {
         return variance(first, last, false) < variance(first, last, true);
     }
 
     // 计算 [first, last) 中，维度r的方差
-    [[nodiscard]] auto variance(const u32 &first, const u32 &last, const bool &r) const {
+    [[nodiscard]] auto variance(const unsigned &first, const unsigned &last, const bool &r) const {
         auto sum_x = 0.0f, sum_x2 = 0.0f;
         for (auto i = first; i != last; ++i) {
             auto const &tmp = static_cast<float>(points_[i].crd[r]);
@@ -100,7 +98,7 @@ private:
     ret_t none_{numeric_limits<double>::infinity(), Other()};
 
     // 返回px的欧氏距离的平方，使用浮点数避免平方后溢出
-    auto dis2(const crd_arr_t &p, const u32 &x) {
+    auto dis2(const crd_arr_t &p, const unsigned &x) {
         auto const &dis_x =
                 static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
         auto const &dis_y =
@@ -112,9 +110,9 @@ private:
 
 public:
     // 返回距离点p最近的k个点，欧氏距离
-    auto knn(const crd_arr_t &p, const u32 &k) {
+    auto knn(const crd_arr_t &p, const unsigned &k) {
         vector<ret_t> ret(k, none_);
-        function<void(u32, bool)> dfs = [&](const u32 &x, const bool &r) {
+        function<void(unsigned, bool)> dfs = [&](const unsigned &x, const bool &r) {
             if (x != inf) {
                 // auto const & r = axis_[x];
                 auto const &dis_sp = p[r] - points_[x].crd[r];
@@ -182,7 +180,7 @@ int main() {
     for (auto &&[key_, vec_]: dat) {
         trees.emplace(key_, vec_);
     }
-    u32 k = 0;
+    unsigned k = 0;
     while (n-- != 0) {
         cin >> x >> y >> key >> k;
         auto &&ans = trees.at(key).knn(array{x, y}, k);
