@@ -24,7 +24,7 @@ public:
         crd_arr_t crd;
         Other other;
 
-        point(crd_arr_t const &crd_in, Other other_in) : crd(crd_in), other(std::move(other_in)) {}
+        point(crd_arr_t crd_in, Other other_in) : crd(crd_in), other(std::move(other_in)) {}
     };
 
 private:
@@ -35,16 +35,16 @@ private:
     vector<point> points_;
 
     // 以 [first, last) 中的点建树，返回此树的root
-    unsigned build(unsigned const &first, unsigned const &last, bool const &r) { // NOLINT(misc-no-recursion)
-        // auto const &r = choose_axis(first, last);
-        auto const &num = last - first;
-        auto const &mid = first + num / 2;
+    unsigned build(unsigned first, unsigned last, bool r) { // NOLINT(misc-no-recursion)
+        // auto r = choose_axis(first, last);
+        auto num = last - first;
+        auto mid = first + num / 2;
         if (num == 1) {
         } else if (num == 2) {
             // axis_[mid] = r;
             (points_[first].crd[r] <= points_[mid].crd[r] ? lc_[mid] : rc_[mid]) = first;
         } else {
-            auto const &b = points_.begin();
+            auto b = points_.begin();
             nth_element(b + first, b + mid, b + last,
                         [&](point const &x, point const &y) { return x.crd[r] < y.crd[r]; });
             // axis_[mid] = r;
@@ -54,25 +54,30 @@ private:
         return mid;
     }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "ConstantParameter"
+
     // 选择 [first, last) 中方差最大的维度
-    [[nodiscard]] auto choose_axis(unsigned const &first, unsigned const &last) const {
+    [[nodiscard]] auto choose_axis(unsigned first, unsigned last) const {
         return variance(first, last, false) < variance(first, last, true);
     }
 
     // 计算 [first, last) 中，维度r的方差
-    [[nodiscard]] auto variance(unsigned const &first, unsigned const &last, bool const &r) const {
+    [[nodiscard]] auto variance(unsigned first, unsigned last, bool r) const {
         auto sum_x = 0.0f, sum_x2 = 0.0f;
         for (auto i = first; i != last; ++i) {
-            auto const &tmp = static_cast<float>(points_[i].crd[r]);
+            auto tmp = static_cast<float>(points_[i].crd[r]);
             sum_x += tmp;
             sum_x2 += tmp * tmp;
         }
         return sum_x2 - sum_x * sum_x / static_cast<float>(last - first);
     }
 
+#pragma clang diagnostic pop
+
 public:
     [[maybe_unused]] explicit two_d_tree(vector<point> &&points_in) : points_(std::move(points_in)) {
-        auto const &sz = points_.size();
+        auto sz = points_.size();
         beg_ = choose_axis(0, sz);
         // axis_.resize(sz);
         lc_.resize(sz, inf);
@@ -94,23 +99,23 @@ private:
     ret_t none_{numeric_limits<double>::infinity(), Other()};
 
     // 返回px的欧氏距离的平方，使用浮点数避免平方后溢出
-    auto dis2(crd_arr_t const &p, unsigned const &x) {
-        auto const &dis_x = static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
-        auto const &dis_y = static_cast<double>(p[1]) - static_cast<double>(points_[x].crd[1]);
+    auto dis2(crd_arr_t p, unsigned x) {
+        auto dis_x = static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
+        auto dis_y = static_cast<double>(p[1]) - static_cast<double>(points_[x].crd[1]);
         return static_cast<double>(lround(sqrt(dis_x * dis_x + dis_y * dis_y) * 1000)) / 1000;
     }
 
 public:
     // 返回距离点p最近的k个点，欧氏距离
-    auto knn(crd_arr_t const &p, unsigned const &k) {
+    auto knn(crd_arr_t p, unsigned k) {
         vector<ret_t> ret(k, none_);
-        function<void(unsigned, bool)> dfs = [&](unsigned const &x, bool const &r) {
+        function<void(unsigned, bool)> dfs = [&](unsigned x, bool r) {
             if (x != inf) {
-                // auto const & r = axis_[x];
-                auto const &dis_sp = p[r] - points_[x].crd[r];
-                auto const &left = dis_sp <= 0;
+                // auto r = axis_[x];
+                auto dis_sp = p[r] - points_[x].crd[r];
+                auto left = dis_sp <= 0;
                 dfs(left ? lc_[x] : rc_[x], !r);
-                auto const &tmp = ret_t{dis2(p, x), points_[x].other};
+                auto tmp = ret_t{dis2(p, x), points_[x].other};
                 push_pop(ret, tmp);
                 if (abs(dis_sp) <= ret.front().dis) {
                     dfs(left ? rc_[x] : lc_[x], !r);
@@ -175,7 +180,7 @@ int main() {
     unsigned k = 0;
     while (n-- != 0) {
         cin >> x >> y >> key >> k;
-        auto &&ans = trees.at(key).knn(array{x, y}, k);
+        auto ans = trees.at(key).knn(array{x, y}, k);
         for (auto &&a: ans) {
             cout << a.other << " " << fixed << setprecision(3) << a.dis << "\n";
         }
