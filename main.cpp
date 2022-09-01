@@ -28,11 +28,11 @@ public:
     };
 
 private:
-    unsigned root_ = 0;
-    vector<unsigned> lc_, rc_;
-    // vector<bool> axis_;
-    bool beg_ = false;
-    vector<point> points_;
+    unsigned root = 0;
+    vector<unsigned> lc, rc;
+    // vector<bool> axis;
+    bool beg = false;
+    vector<point> points;
 
     // 以 [first, last) 中的点建树，返回此树的root
     unsigned build(unsigned first, unsigned last, bool r) { // NOLINT(misc-no-recursion)
@@ -41,15 +41,15 @@ private:
         auto mid = first + num / 2;
         if (num == 1) {
         } else if (num == 2) {
-            // axis_[mid] = r;
-            (points_[first].crd[r] <= points_[mid].crd[r] ? lc_[mid] : rc_[mid]) = first;
+            // axis[mid] = r;
+            (points[first].crd[r] <= points[mid].crd[r] ? lc[mid] : rc[mid]) = first;
         } else {
-            auto b = points_.begin();
+            auto b = points.begin();
             nth_element(b + first, b + mid, b + last,
                         [&](point const &x, point const &y) { return x.crd[r] < y.crd[r]; });
-            // axis_[mid] = r;
-            lc_[mid] = build(first, mid, !r);
-            rc_[mid] = build(mid + 1, last, !r);
+            // axis[mid] = r;
+            lc[mid] = build(first, mid, !r);
+            rc[mid] = build(mid + 1, last, !r);
         }
         return mid;
     }
@@ -66,7 +66,7 @@ private:
     [[nodiscard]] auto variance(unsigned first, unsigned last, bool r) const {
         auto sum_x = 0.0f, sum_x2 = 0.0f;
         for (auto i = first; i != last; ++i) {
-            auto tmp = static_cast<float>(points_[i].crd[r]);
+            auto tmp = static_cast<float>(points[i].crd[r]);
             sum_x += tmp;
             sum_x2 += tmp * tmp;
         }
@@ -76,13 +76,13 @@ private:
 #pragma clang diagnostic pop
 
 public:
-    [[maybe_unused]] explicit two_d_tree(vector<point> &&points_in) : points_(std::move(points_in)) {
-        auto sz = points_.size();
-        beg_ = choose_axis(0, sz);
-        // axis_.resize(sz);
-        lc_.resize(sz, inf);
-        rc_.resize(sz, inf);
-        root_ = build(0, sz, beg_);
+    [[maybe_unused]] explicit two_d_tree(vector<point> &&points_in) : points(std::move(points_in)) {
+        auto sz = points.size();
+        beg = choose_axis(0, sz);
+        // axis.resize(sz);
+        lc.resize(sz, inf);
+        rc.resize(sz, inf);
+        root = build(0, sz, beg);
     }
 
 private:
@@ -96,35 +96,35 @@ private:
         }
     };
 
-    ret_t none_{numeric_limits<double>::infinity(), Other()};
+    ret_t none{numeric_limits<double>::infinity(), Other()};
 
     // 返回px的欧氏距离的平方，使用浮点数避免平方后溢出
     auto dis2(crd_arr_t p, unsigned x) {
-        auto dis_x = static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
-        auto dis_y = static_cast<double>(p[1]) - static_cast<double>(points_[x].crd[1]);
+        auto dis_x = static_cast<double>(p[0]) - static_cast<double>(points[x].crd[0]);
+        auto dis_y = static_cast<double>(p[1]) - static_cast<double>(points[x].crd[1]);
         return static_cast<double>(lround(sqrt(dis_x * dis_x + dis_y * dis_y) * 1000)) / 1000;
     }
 
 public:
     // 返回距离点p最近的k个点，欧氏距离
     auto knn(crd_arr_t p, unsigned k) {
-        vector<ret_t> ret(k, none_);
+        vector<ret_t> ret(k, none);
         function<void(unsigned, bool)> dfs = [&](unsigned x, bool r) {
             if (x != inf) {
-                // auto r = axis_[x];
-                auto dis_sp = p[r] - points_[x].crd[r];
+                // auto r = axis[x];
+                auto dis_sp = p[r] - points[x].crd[r];
                 auto left = dis_sp <= 0;
-                dfs(left ? lc_[x] : rc_[x], !r);
-                auto tmp = ret_t{dis2(p, x), points_[x].other};
+                dfs(left ? lc[x] : rc[x], !r);
+                auto tmp = ret_t{dis2(p, x), points[x].other};
                 push_pop(ret, tmp);
                 if (abs(dis_sp) <= ret.front().dis) {
-                    dfs(left ? rc_[x] : lc_[x], !r);
+                    dfs(left ? rc[x] : lc[x], !r);
                 }
             }
         };
-        dfs(root_, beg_);
+        dfs(root, beg);
         sort_heap(ret.begin(), ret.end());
-        ret.erase(lower_bound(ret.begin(), ret.end(), none_), ret.end());
+        ret.erase(lower_bound(ret.begin(), ret.end(), none), ret.end());
         return ret;
     }
 };
