@@ -161,22 +161,27 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using kdt_t = two_d_tree<short, name_t>;
     auto m = 0, n = 0;
     cin >> m >> n;
+
+    using kdt_t = two_d_tree<short, name_t>;
     unordered_map<string, vector<kdt_t::point>> dat;
+
     name_t name;
     short x = 0;
     short y = 0;
     string key;
+
     while (m-- != 0) {
         cin >> name >> x >> y >> key;
         dat[key].emplace_back(array{x, y}, name);
     }
+
     unordered_map<string, kdt_t> trees;
     for (auto &&[key_, vec_]: dat) {
         trees.emplace(key_, std::move(vec_));
     }
+
     unsigned k = 0;
     while (n-- != 0) {
         cin >> x >> y >> key >> k;
