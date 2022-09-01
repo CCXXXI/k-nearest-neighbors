@@ -15,7 +15,6 @@ using u8 = uint8_t;
 
 #define $ auto
 #define $$ auto &&
-#define $C auto const &
 
 $ constexpr inf = 0x3f3f3f3f;
 
@@ -61,16 +60,16 @@ private:
 
   // 以 [first, last) 中的点建树，返回此树的root
   u32 build(const u32 &first, const u32 &last, const bool &r) {
-    // $C r = choose_axis(first, last);
-    $C num = last - first;
-    $C mid = first + num / 2;
+    // auto const & r = choose_axis(first, last);
+    auto const & num = last - first;
+    auto const & mid = first + num / 2;
     if (num == 1) {
     } else if (num == 2) {
       // axis_[mid] = r;
       (points_[first].crd[r] <= points_[mid].crd[r] ? lc_[mid] : rc_[mid]) =
           first;
     } else {
-      $C b = points_.begin();
+      auto const & b = points_.begin();
       nth_element(
           b + first, b + mid, b + last,
           [&](const point &x, const point &y) { return x.crd[r] < y.crd[r]; });
@@ -90,7 +89,7 @@ private:
   $ variance(const u32 &first, const u32 &last, const bool &r) const {
     $ sum_x = 0.0f, sum_x2 = 0.0f;
     for ($ i = first; i != last; ++i) {
-      $C tmp = static_cast<float>(points_[i].crd[r]);
+      auto const & tmp = static_cast<float>(points_[i].crd[r]);
       sum_x += tmp;
       sum_x2 += tmp * tmp;
     }
@@ -100,7 +99,7 @@ private:
 public:
   // 以vector<point>初始化，之后外部不应修改此vector
   explicit _2dt(vector<point> &points_in) : points_(points_in) {
-    $C sz = points_.size();
+    auto const & sz = points_.size();
     beg_ = choose_axis(0, sz);
     // axis_.resize(sz);
     lc_.resize(sz, inf);
@@ -122,9 +121,9 @@ private:
 
   // 返回px的欧氏距离的平方，使用浮点数避免平方后溢出
   $ dis2(const crd_arr_t &p, const u32 &x) {
-    $C dis_x =
+    auto const & dis_x =
         static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
-    $C dis_y =
+    auto const & dis_y =
         static_cast<double>(p[1]) - static_cast<double>(points_[x].crd[1]);
     return static_cast<double>(static_cast<i32>(
                sqrt(dis_x * dis_x + dis_y * dis_y) * 1000 + 0.5)) /
@@ -137,11 +136,11 @@ public:
     vector<ret_t> ret(k, none_);
     function<void(u32, bool)> dfs = [&](const u32 &x, const bool &r) {
       if (x != inf) {
-        // $C r = axis_[x];
-        $C dis_sp = p[r] - points_[x].crd[r];
-        $C left = dis_sp <= 0;
+        // auto const & r = axis_[x];
+        auto const & dis_sp = p[r] - points_[x].crd[r];
+        auto const & left = dis_sp <= 0;
         dfs(left ? lc_[x] : rc_[x], r ^ 1);
-        $C tmp = ret_t{dis2(p, x), points_[x].other};
+        auto const & tmp = ret_t{dis2(p, x), points_[x].other};
         push_pop(ret, tmp);
         if (abs(dis_sp) <= ret.front().dis) {
           dfs(left ? rc_[x] : lc_[x], r ^ 1);
