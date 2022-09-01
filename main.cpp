@@ -86,10 +86,10 @@ private:
             $C b = points_.begin();
             nth_element(b + first, b + mid, b + last,
                         [&](const point& x, const point& y)
-                        {
-                            return x.crd[r] < y.crd[r];
-                        }
-            );
+            {
+                return x.crd[r] < y.crd[r];
+            }
+                       );
             // axis_[mid] = r;
             lc_[mid] = build(first, mid, r ^ 1);
             rc_[mid] = build(mid + 1, last, r ^ 1);
