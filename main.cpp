@@ -4,7 +4,7 @@ using namespace std;
 
 int constexpr inf = 0x3f3f3f3f;
 
-// 辅助函数，相当于先push再pop
+// 辅助函数，相当于先 push 再 pop
 template<typename E>
 void push_pop(vector<E> &v, E const &e) {
     if (e < v.front()) {
@@ -34,7 +34,7 @@ private:
     bool beg = false;
     vector<point> points;
 
-    // 以 [first, last) 中的点建树，返回此树的root
+    // 以 [first, last) 中的点建树，返回此树的 root
     unsigned build(unsigned first, unsigned last, bool r) { // NOLINT(misc-no-recursion)
         // auto r = choose_axis(first, last);
         auto num = last - first;
@@ -62,7 +62,7 @@ private:
         return variance(first, last, false) < variance(first, last, true);
     }
 
-    // 计算 [first, last) 中，维度r的方差
+    // 计算 [first, last) 中，维度 r 的方差
     [[nodiscard]] auto variance(unsigned first, unsigned last, bool r) const {
         auto sum_x = 0.0f, sum_x2 = 0.0f;
         for (auto i = first; i != last; ++i) {
@@ -98,7 +98,7 @@ private:
 
     ret_t none{numeric_limits<double>::infinity(), Other()};
 
-    // 返回px的欧氏距离的平方，使用浮点数避免平方后溢出
+    // 返回 px 的欧氏距离的平方，使用浮点数避免平方后溢出
     auto dis2(crd_arr_t p, unsigned x) {
         auto dis_x = static_cast<double>(p[0]) - static_cast<double>(points[x].crd[0]);
         auto dis_y = static_cast<double>(p[1]) - static_cast<double>(points[x].crd[1]);
@@ -106,7 +106,7 @@ private:
     }
 
 public:
-    // 返回距离点p最近的k个点，欧氏距离
+    // 返回距离点 p 最近的 k 个点，欧氏距离
     auto knn(crd_arr_t p, unsigned k) {
         vector<ret_t> ret(k, none);
         function<void(unsigned, bool)> dfs = [&](unsigned x, bool r) {
