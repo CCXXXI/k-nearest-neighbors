@@ -1,30 +1,11 @@
-#pragma region base
-
 #include "bits/stdc++.h"
 
 using namespace std;
 
-using i64 = int64_t;
-using u64 = uint64_t;
 using i32 = int32_t;
 using u32 = uint32_t;
-using i16 = int16_t;
-using u16 = uint16_t;
-using i8 = int8_t;
-using u8 = uint8_t;
 
 auto constexpr inf = 0x3f3f3f3f;
-
-auto ccxxxi() {
-#ifdef ONLINE_JUDGE
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-#endif
-}
-
-#pragma endregion
-
-#pragma region 2 - dimensional tree
 
 // 辅助函数，相当于先push再pop
 template<typename E>
@@ -154,7 +135,6 @@ public:
     }
 };
 
-#pragma endregion
 
 using name_t = array<char, 12>;
 
@@ -184,7 +164,8 @@ auto &operator>>(istream &in, name_t &a) {
 }
 
 int main() {
-    ccxxxi();
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
     using kdt_t = _2dt<short, name_t>;
     auto m = 0, n = 0;
