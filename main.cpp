@@ -14,7 +14,6 @@ using i8 = int8_t;
 using u8 = uint8_t;
 
 #define $ auto
-#define $$ auto &&
 
 $ constexpr inf = 0x3f3f3f3f;
 
@@ -159,7 +158,7 @@ public:
 using name_t = array<char, 12>;
 
 auto &operator<<(ostream &o, const name_t &a) {
-  for ($$ i : a) {
+  for (auto && i : a) {
     o << i;
   }
   return o;
@@ -199,14 +198,14 @@ int main() {
     dat[key].emplace_back(array{x, y}, name);
   }
   unordered_map<string, kdt_t> trees;
-  for ($$[key_, vec_] : dat) {
+  for (auto &&[key_, vec_] : dat) {
     trees.emplace(key_, vec_);
   }
   u32 k = 0;
   while (n-- != 0) {
     cin >> x >> y >> key >> k;
-    $$ ans = trees.at(key).knn(array{x, y}, k);
-    for ($$ a : ans) {
+    auto && ans = trees.at(key).knn(array{x, y}, k);
+    for (auto && a : ans) {
       cout << a.other << " " << fixed << setprecision(3) << a.dis << "\n";
     }
   }
