@@ -2,7 +2,6 @@
 
 using namespace std;
 
-using i32 = int32_t;
 using u32 = uint32_t;
 
 auto constexpr inf = 0x3f3f3f3f;
@@ -39,7 +38,7 @@ private:
     vector<point> &points_;
 
     // 以 [first, last) 中的点建树，返回此树的root
-    u32 build(const u32 &first, const u32 &last, const bool &r) {
+    u32 build(const u32 &first, const u32 &last, const bool &r) { // NOLINT(misc-no-recursion)
         // auto const & r = choose_axis(first, last);
         auto const &num = last - first;
         auto const &mid = first + num / 2;
@@ -54,19 +53,19 @@ private:
                     b + first, b + mid, b + last,
                     [&](const point &x, const point &y) { return x.crd[r] < y.crd[r]; });
             // axis_[mid] = r;
-            lc_[mid] = build(first, mid, r ^ 1);
-            rc_[mid] = build(mid + 1, last, r ^ 1);
+            lc_[mid] = build(first, mid, !r);
+            rc_[mid] = build(mid + 1, last, !r);
         }
         return mid;
     }
 
     // 选择 [first, last) 中方差最大的维度
-    auto choose_axis(const u32 &first, const u32 &last) const {
+    [[nodiscard]] auto choose_axis(const u32 &first, const u32 &last) const {
         return variance(first, last, false) < variance(first, last, true);
     }
 
     // 计算 [first, last) 中，维度r的方差
-    auto variance(const u32 &first, const u32 &last, const bool &r) const {
+    [[nodiscard]] auto variance(const u32 &first, const u32 &last, const bool &r) const {
         auto sum_x = 0.0f, sum_x2 = 0.0f;
         for (auto i = first; i != last; ++i) {
             auto const &tmp = static_cast<float>(points_[i].crd[r]);
@@ -78,7 +77,7 @@ private:
 
 public:
     // 以vector<point>初始化，之后外部不应修改此vector
-    explicit two_d_tree(vector<point> &points_in) : points_(points_in) {
+    [[maybe_unused]] explicit two_d_tree(vector<point> &points_in) : points_(points_in) {
         auto const &sz = points_.size();
         beg_ = choose_axis(0, sz);
         // axis_.resize(sz);
@@ -106,8 +105,8 @@ private:
                 static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
         auto const &dis_y =
                 static_cast<double>(p[1]) - static_cast<double>(points_[x].crd[1]);
-        return static_cast<double>(static_cast<i32>(
-                sqrt(dis_x * dis_x + dis_y * dis_y) * 1000 + 0.5)) /
+        return static_cast<double>(lround(
+                sqrt(dis_x * dis_x + dis_y * dis_y) * 1000)) /
                1000;
     }
 
@@ -120,11 +119,11 @@ public:
                 // auto const & r = axis_[x];
                 auto const &dis_sp = p[r] - points_[x].crd[r];
                 auto const &left = dis_sp <= 0;
-                dfs(left ? lc_[x] : rc_[x], r ^ 1);
+                dfs(left ? lc_[x] : rc_[x], !r);
                 auto const &tmp = ret_t{dis2(p, x), points_[x].other};
                 push_pop(ret, tmp);
                 if (abs(dis_sp) <= ret.front().dis) {
-                    dfs(left ? rc_[x] : lc_[x], r ^ 1);
+                    dfs(left ? rc_[x] : lc_[x], !r);
                 }
             }
         };
