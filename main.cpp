@@ -18,7 +18,7 @@ auto push_pop(vector<E> &v, const E &e) {
 }
 
 template<typename Crd, typename Other>
-class _2dt {
+class two_d_tree {
 public:
     using crd_arr_t = array<Crd, 2>;
 
@@ -78,7 +78,7 @@ private:
 
 public:
     // 以vector<point>初始化，之后外部不应修改此vector
-    explicit _2dt(vector<point> &points_in) : points_(points_in) {
+    explicit two_d_tree(vector<point> &points_in) : points_(points_in) {
         auto const &sz = points_.size();
         beg_ = choose_axis(0, sz);
         // axis_.resize(sz);
@@ -167,7 +167,7 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using kdt_t = _2dt<short, name_t>;
+    using kdt_t = two_d_tree<short, name_t>;
     auto m = 0, n = 0;
     cin >> m >> n;
     unordered_map<string, vector<kdt_t::point>> dat;
