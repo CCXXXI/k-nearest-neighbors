@@ -1,5 +1,11 @@
 # top-k商户查询
 
+[![GitHub license](https://img.shields.io/github/license/ccxxxi/k-nearest-neighbors)](LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ccxxxi/k-nearest-neighbors)](https://github.com/CCXXXI/k-nearest-neighbors/commits)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/CCXXXI/k-nearest-neighbors.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/CCXXXI/k-nearest-neighbors/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/CCXXXI/k-nearest-neighbors.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/CCXXXI/k-nearest-neighbors/context:python)
+[![CodeFactor](https://www.codefactor.io/repository/github/ccxxxi/k-nearest-neighbors/badge)](https://www.codefactor.io/repository/github/ccxxxi/k-nearest-neighbors)
+
 ECNU 数据结构与算法课程项目。
 
 ## 题面
