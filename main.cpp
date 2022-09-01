@@ -32,7 +32,7 @@ private:
     vector<unsigned> lc_, rc_;
     // vector<bool> axis_;
     bool beg_ = false;
-    vector<point> &points_;
+    vector<point> points_;
 
     // 以 [first, last) 中的点建树，返回此树的root
     unsigned build(unsigned const &first, unsigned const &last, bool const &r) { // NOLINT(misc-no-recursion)
@@ -71,8 +71,7 @@ private:
     }
 
 public:
-    // 以vector<point>初始化，之后外部不应修改此vector
-    [[maybe_unused]] explicit two_d_tree(vector<point> &points_in) : points_(points_in) {
+    [[maybe_unused]] explicit two_d_tree(vector<point> &&points_in) : points_(std::move(points_in)) {
         auto const &sz = points_.size();
         beg_ = choose_axis(0, sz);
         // axis_.resize(sz);
@@ -171,7 +170,7 @@ int main() {
     }
     unordered_map<string, kdt_t> trees;
     for (auto &&[key_, vec_]: dat) {
-        trees.emplace(key_, vec_);
+        trees.emplace(key_, std::move(vec_));
     }
     unsigned k = 0;
     while (n-- != 0) {
