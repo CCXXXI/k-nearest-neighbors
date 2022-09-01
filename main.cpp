@@ -47,7 +47,7 @@ public:
         Other other;
 
         point(const crd_arr_t &crd_in, Other other_in)
-                : crd(crd_in), other(std::move(other_in)) {}
+            : crd(crd_in), other(std::move(other_in)) {}
     };
 
 private:
@@ -66,12 +66,14 @@ private:
         } else if (num == 2) {
             // axis_[mid] = r;
             (points_[first].crd[r] <= points_[mid].crd[r] ? lc_[mid] : rc_[mid]) =
-                    first;
+                first;
         } else {
             auto const &b = points_.begin();
             nth_element(
-                    b + first, b + mid, b + last,
-                    [&](const point &x, const point &y) { return x.crd[r] < y.crd[r]; });
+                b + first, b + mid, b + last,
+            [&](const point &x, const point &y) {
+                return x.crd[r] < y.crd[r];
+            });
             // axis_[mid] = r;
             lc_[mid] = build(first, mid, r ^ 1);
             rc_[mid] = build(mid + 1, last, r ^ 1);
@@ -122,11 +124,11 @@ private:
     // 返回px的欧氏距离的平方，使用浮点数避免平方后溢出
     auto dis2(const crd_arr_t &p, const u32 &x) {
         auto const &dis_x =
-                static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
+            static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
         auto const &dis_y =
-                static_cast<double>(p[1]) - static_cast<double>(points_[x].crd[1]);
+            static_cast<double>(p[1]) - static_cast<double>(points_[x].crd[1]);
         return static_cast<double>(static_cast<i32>(
-                sqrt(dis_x * dis_x + dis_y * dis_y) * 1000 + 0.5)) /
+                                       sqrt(dis_x * dis_x + dis_y * dis_y) * 1000 + 0.5)) /
                1000;
     }
 
