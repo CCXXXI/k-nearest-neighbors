@@ -10,6 +10,10 @@ restylers:
       enabled: false
   - yapf:
       enabled: false
+  - astyle:
+      enabled: false
+  - clang-format:
+      enabled: false
   - prettier-markdown:
       arguments: ["--prose-wrap", "preserve"]
   - "*"
