@@ -1,4 +1,4 @@
-# top-k商户查询
+# top-k 商户查询
 
 [![GitHub license](https://img.shields.io/github/license/ccxxxi/k-nearest-neighbors)](LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ccxxxi/k-nearest-neighbors)](https://github.com/CCXXXI/k-nearest-neighbors/commits)
