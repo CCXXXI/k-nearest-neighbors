@@ -13,11 +13,9 @@ using u16 = uint16_t;
 using i8 = int8_t;
 using u8 = uint8_t;
 
-#define $ auto
+auto constexpr inf = 0x3f3f3f3f;
 
-$ constexpr inf = 0x3f3f3f3f;
-
-$ ccxxxi() {
+auto ccxxxi() {
 #ifdef ONLINE_JUDGE
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -29,7 +27,7 @@ $ ccxxxi() {
 #pragma region 2 - dimensional tree
 
 // 辅助函数，相当于先push再pop
-template <typename E> $ push_pop(vector<E> &v, const E &e) {
+template <typename E> auto push_pop(vector<E> &v, const E &e) {
   if (e < v.front()) {
     pop_heap(v.begin(), v.end());
     v.back() = e;
@@ -80,14 +78,14 @@ private:
   }
 
   // 选择 [first, last) 中方差最大的维度
-  $ choose_axis(const u32 &first, const u32 &last) const {
+  auto choose_axis(const u32 &first, const u32 &last) const {
     return variance(first, last, false) < variance(first, last, true);
   }
 
   // 计算 [first, last) 中，维度r的方差
-  $ variance(const u32 &first, const u32 &last, const bool &r) const {
-    $ sum_x = 0.0f, sum_x2 = 0.0f;
-    for ($ i = first; i != last; ++i) {
+  auto variance(const u32 &first, const u32 &last, const bool &r) const {
+    auto sum_x = 0.0f, sum_x2 = 0.0f;
+    for (auto i = first; i != last; ++i) {
       auto const &tmp = static_cast<float>(points_[i].crd[r]);
       sum_x += tmp;
       sum_x2 += tmp * tmp;
@@ -111,7 +109,7 @@ private:
   public:
     double dis;
     Other other;
-    $ operator<(const ret_t &a) const {
+    auto operator<(const ret_t &a) const {
       return tie(this->dis, this->other) < tie(a.dis, a.other);
     }
   };
@@ -119,7 +117,7 @@ private:
   ret_t none_{numeric_limits<double>::infinity(), Other()};
 
   // 返回px的欧氏距离的平方，使用浮点数避免平方后溢出
-  $ dis2(const crd_arr_t &p, const u32 &x) {
+  auto dis2(const crd_arr_t &p, const u32 &x) {
     auto const &dis_x =
         static_cast<double>(p[0]) - static_cast<double>(points_[x].crd[0]);
     auto const &dis_y =
@@ -131,7 +129,7 @@ private:
 
 public:
   // 返回距离点p最近的k个点，欧氏距离
-  $ knn(const crd_arr_t &p, const u32 &k) {
+  auto knn(const crd_arr_t &p, const u32 &k) {
     vector<ret_t> ret(k, none_);
     function<void(u32, bool)> dfs = [&](const u32 &x, const bool &r) {
       if (x != inf) {
@@ -186,7 +184,7 @@ int main() {
   ccxxxi();
 
   using kdt_t = _2dt<short, name_t>;
-  $ m = 0, n = 0;
+  auto m = 0, n = 0;
   cin >> m >> n;
   unordered_map<string, vector<kdt_t::point>> dat;
   name_t name;
